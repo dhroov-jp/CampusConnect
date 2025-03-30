@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusConnect - Miscellaneous</title>
+    <link rel="stylesheet" href="others.css">
+    <script src="others.js" defer></script>
+</head>
+<body>
+    <!-- Header with logo and search bar -->
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <img src="logo.png" alt="CampusConnect Logo">
+            </div>
+            <div class="search-container">
+                <input type="text" placeholder="Search items..." class="search-input">
+                <button class="search-btn">Search</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Cart Button -->
+    <div class="cart-container">
+        <button class="cart-button" onclick="window.location.href='cart.html'">
+            <img src="cart.webp" alt="Cart" class="cart-icon">
+            <span id="cart-count">0</span>
+        </button>
+    </div>
+
+    <h1 class="miscellaneous-heading">Miscellaneous</h1>
+    <div class="product-container">
+        <!-- Product 1 -->
+        <div class="product">
+            <img src="water_bottle.jpg" alt="Water Bottle">
+            <h2>Water Bottle</h2>
+            <p class="price">Price: ₹250</p>
+            <div class="hover-area"></div>
+            <div class="details">
+                <p>Owner: Sam Hydrate</p>
+                <p>Phone: +91 9876543210</p>
+                <p>Description: A 1L stainless steel water bottle.</p>
+                <button class="add-to-cart" onclick="addToCart()">Add to Cart</button>
+            </div>
+        </div>
+
+        <!-- Product 2 -->
+        <div class="product">
+            <img src="umbrella.jpg" alt="Umbrella">
+            <h2>Umbrella</h2>
+            <p class="price">Price: ₹400</p>
+            <div class="hover-area"></div>
+            <div class="details">
+                <p>Owner: Rainy Day</p>
+                <p>Phone: +91 9123456789</p>
+                <p>Description: A durable, foldable umbrella.</p>
+                <button class="add-to-cart" onclick="addToCart()">Add to Cart</button>
+            </div>
+        </div>
+
+        <!-- Product 3 -->
+        <div class="product">
+            <img src="keychain.jpg" alt="Keychain">
+            <h2>Keychain</h2>
+            <p class="price">Price: ₹50</p>
+            <div class="hover-area"></div>
+            <div class="details">
+                <p>Owner: Emily Keys</p>
+                <p>Phone: +91 9988776655</p>
+                <p>Description: A stylish keychain for your keys.</p>
+                <button class="add-to-cart" onclick="addToCart()">Add to Cart</button>
+            </div>
+        </div>
+
+        <!-- Add more products as needed -->
+    </div>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>&copy; 2024 CampusConnect. All rights reserved.</p>
+    </footer>
+</body>
+</html>

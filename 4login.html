@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - CampusConnect</title>
+    <link rel="stylesheet" href="4.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="4.html">
+                    <img src="logo.svg" alt="CampusConnect Logo">
+                </a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="books.html">Books</a></li>
+                <li><a href="Drawing-Equipments.html">Drawing Equipments</a></li>
+                <li><a href="stationary.html">Stationary</a></li>
+                <li><a href="others.html">Others</a></li>
+            </ul>
+            <ul class="nav-links">
+                <li class="auth-links">
+                    <a href="4signup.html" class="signup-link">Sign Up</a> 
+                    <a href="4login.html" class="login-link">Login</a>
+                </li>
+                <li><a href="4sell3.html">Sell Item</a></li>
+                <li class="logout-btn hidden"><a href="#" id="logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Login Form Section -->
+    <section class="auth-section">
+        <div class="auth-container">
+            <h1>Welcome Back</h1>
+            <p class="auth-subtitle">Login to your CampusConnect account</p>
+            <form class="auth-form" id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required placeholder="Enter your password">
+                </div>
+                <div class="form-group">
+                    <label class="checkbox-container">
+                        <input type="checkbox" name="remember">
+                        <span class="checkmark"></span>
+                        Remember me
+                    </label>
+                    <a href="forgot-password.html" class="forgot-password">Forgot Password?</a>
+                </div>
+                <button type="submit" class="auth-button">Login</button>
+            </form>
+            <p class="auth-switch">
+                Don't have an account? <a href="4signup.html">Sign up</a>
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>&copy; 2024 CampusConnect. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Check if user is already logged in
+        if (localStorage.getItem('isLoggedIn') === 'true') {
+            window.location.href = '4.html';
+        }
+
+        // Handle login form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Here you would typically validate credentials with a backend
+            // For demo purposes, we'll just simulate a successful login
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('userEmail', email);
+            
+            // Redirect to home page
+            window.location.href = '4.html';
+        });
+
+        // Handle logout
+        document.getElementById('logout').addEventListener('click', function(e) {
+            e.preventDefault();
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('userEmail');
+            window.location.href = '4login.html';
+        });
+    </script>
+</body>
+</html>

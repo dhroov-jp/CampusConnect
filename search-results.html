@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results - CampusConnect</title>
+    <link rel="stylesheet" href="4.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="4.html">
+                    <img src="logo.svg" alt="CampusConnect Logo">
+                </a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="books.html">Books</a></li>
+                <li><a href="Drawing-Equipments.html">Drawing Equipments</a></li>
+                <li><a href="stationary.html">Stationary</a></li>
+                <li><a href="others.html">Others</a></li>
+            </ul>
+            <ul class="nav-links">
+                <li class="auth-links">
+                    <a href="4signup.html" class="signup-link">Sign Up</a> 
+                    <a href="4login.html" class="login-link">Login</a>
+                </li>
+                <li><a href="4sell3.html">Sell Item</a></li>
+                <li class="logout-btn hidden"><a href="#" id="logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Search Results Section -->
+    <section class="search-results">
+        <div class="container">
+            <h1>Search Results</h1>
+            <div class="search-summary">
+                <p>Showing results for: <span id="searchTerm"></span></p>
+            </div>
+            <div class="items-grid" id="searchResults">
+                <!-- Results will be dynamically inserted here -->
+            </div>
+            <div class="no-results hidden" id="noResults">
+                <p>No items found matching your search.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>&copy; 2024 CampusConnect. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Check login state
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        const authLinks = document.querySelector('.auth-links');
+        const logoutBtn = document.querySelector('.logout-btn');
+        
+        if (isLoggedIn) {
+            authLinks.classList.add('hidden');
+            logoutBtn.classList.add('visible');
+        } else {
+            authLinks.classList.remove('hidden');
+            logoutBtn.classList.remove('visible');
+        }
+
+        // Handle logout
+        document.getElementById('logout').addEventListener('click', function(e) {
+            e.preventDefault();
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('userEmail');
+            window.location.href = '4login.html';
+        });
+
+        // Display search term
+        const searchTerm = localStorage.getItem('searchTerm');
+        document.getElementById('searchTerm').textContent = searchTerm;
+
+        // Search across all categories
+        function searchAllCategories() {
+            const searchTerm = localStorage.getItem('searchTerm')?.toLowerCase() || '';
+            const categories = ['books', 'Drawing-Equipments', 'stationary', 'others'];
+            const resultsContainer = document.getElementById('searchResults');
+            const noResultsElement = document.getElementById('noResults');
+            let foundItems = false;
+
+            resultsContainer.innerHTML = '';
+
+            categories.forEach(category => {
+                const items = JSON.parse(localStorage.getItem(category) || '[]');
+                const matchingItems = items.filter(item => 
+                    item.title.toLowerCase().includes(searchTerm) ||
+                    item.description.toLowerCase().includes(searchTerm)
+                );
+
+                if (matchingItems.length > 0) {
+                    foundItems = true;
+                    matchingItems.forEach(item => {
+                        const itemCard = createItemCard(item, category);
+                        resultsContainer.appendChild(itemCard);
+                    });
+                }
+            });
+
+            if (!foundItems) {
+                noResultsElement.classList.remove('hidden');
+            } else {
+                noResultsElement.classList.add('hidden');
+            }
+        }
+
+        // Create item card
+        function createItemCard(item, category) {
+            const div = document.createElement('div');
+            div.className = 'item-card';
+            div.innerHTML = `
+                <img src="${item.images[0]}" alt="${item.title}">
+                <div class="item-details">
+                    <h3>${item.title}</h3>
+                    <p class="price">₹${item.price}</p>
+                    <p class="description">${item.description}</p>
+                    <p class="condition">Condition: ${item.condition}</p>
+                    <p class="category">Category: ${category}</p>
+                    <button onclick="contactSeller('${item.sellerEmail}')" class="contact-btn">Contact Seller</button>
+                </div>
+            `;
+            return div;
+        }
+
+        // Contact seller function
+        function contactSeller(email) {
+            if (!isLoggedIn) {
+                alert('Please login to contact the seller');
+                window.location.href = '4login.html';
+                return;
+            }
+            window.location.href = `mailto:${email}`;
+        }
+
+        // Perform search when page loads
+        searchAllCategories();
+    </script>
+</body>
+</html> 

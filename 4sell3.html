@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sell Item - CampusConnect</title>
+    <link rel="stylesheet" href="4.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="4.html">
+                    <img src="logo.svg" alt="CampusConnect Logo">
+                </a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="books.html">Books</a></li>
+                <li><a href="Drawing-Equipments.html">Drawing Equipments</a></li>
+                <li><a href="stationary.html">Stationary</a></li>
+                <li><a href="others.html">Others</a></li>
+            </ul>
+            <ul class="nav-links">
+                <li class="auth-links">
+                    <a href="4signup.html" class="signup-link">Sign Up</a> 
+                    <a href="4login.html" class="login-link">Login</a>
+                </li>
+                <li><a href="4sell3.html">Sell Item</a></li>
+                <li class="logout-btn hidden"><a href="#" id="logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Sell Item Section -->
+    <section class="sell-section">
+        <div class="sell-container">
+            <h1>List Your Item</h1>
+            <form class="sell-form" id="sellForm">
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <select id="category" name="category" required>
+                        <option value="">Select a category</option>
+                        <option value="books">Books</option>
+                        <option value="Drawing-Equipments">Drawing Equipments</option>
+                        <option value="stationary">Stationary</option>
+                        <option value="others">Others</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" name="title" required placeholder="Enter item title">
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" required placeholder="Describe your item in detail"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="price">Price (₹)</label>
+                    <input type="number" id="price" name="price" required min="0" step="0.01" placeholder="Enter price">
+                </div>
+
+                <div class="form-group">
+                    <label for="condition">Condition</label>
+                    <select id="condition" name="condition" required>
+                        <option value="">Select condition</option>
+                        <option value="new">New</option>
+                        <option value="like-new">Like New</option>
+                        <option value="good">Good</option>
+                        <option value="fair">Fair</option>
+                        <option value="poor">Poor</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Images (Up to 5)</label>
+                    <div class="image-upload" id="imageUpload">
+                        <input type="file" id="images" name="images" multiple accept="image/*">
+                        <p>Click to upload images or drag and drop</p>
+                        <p class="text-sm">PNG, JPG, JPEG up to 5MB</p>
+                    </div>
+                    <div class="image-preview" id="imagePreview"></div>
+                </div>
+
+                <button type="submit" class="submit-btn">List Item</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>&copy; 2024 CampusConnect. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Check login state
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        const authLinks = document.querySelector('.auth-links');
+        const logoutBtn = document.querySelector('.logout-btn');
+        
+        if (isLoggedIn) {
+            authLinks.classList.add('hidden');
+            logoutBtn.classList.remove('hidden');
+        } else {
+            authLinks.classList.remove('hidden');
+            logoutBtn.classList.add('hidden');
+            // Redirect to login if not logged in
+            window.location.href = '4login.html';
+        }
+
+        // Handle logout
+        document.getElementById('logout').addEventListener('click', function(e) {
+            e.preventDefault();
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('userEmail');
+            window.location.href = '4login.html';
+        });
+
+        // Handle image upload and preview
+        const imageUpload = document.getElementById('imageUpload');
+        const imageInput = document.getElementById('images');
+        const imagePreview = document.getElementById('imagePreview');
+        let selectedImages = [];
+
+        imageUpload.addEventListener('click', () => imageInput.click());
+
+        imageUpload.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            imageUpload.style.borderColor = '#4f46e5';
+        });
+
+        imageUpload.addEventListener('dragleave', () => {
+            imageUpload.style.borderColor = '#d1d5db';
+        });
+
+        imageUpload.addEventListener('drop', (e) => {
+            e.preventDefault();
+            imageUpload.style.borderColor = '#d1d5db';
+            handleFiles(e.dataTransfer.files);
+        });
+
+        imageInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        function handleFiles(files) {
+            const maxFiles = 5;
+            const maxSize = 5 * 1024 * 1024; // 5MB
+
+            if (selectedImages.length + files.length > maxFiles) {
+                alert(`You can only upload up to ${maxFiles} images`);
+                return;
+            }
+
+            Array.from(files).forEach(file => {
+                if (file.size > maxSize) {
+                    alert('File size must be less than 5MB');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    selectedImages.push({
+                        file: file,
+                        data: e.target.result
+                    });
+                    updateImagePreview();
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function updateImagePreview() {
+            imagePreview.innerHTML = '';
+            selectedImages.forEach((image, index) => {
+                const div = document.createElement('div');
+                div.className = 'preview-image';
+                div.innerHTML = `
+                    <img src="${image.data}" alt="Preview">
+                    <button type="button" class="remove-image" onclick="removeImage(${index})">×</button>
+                `;
+                imagePreview.appendChild(div);
+            });
+        }
+
+        function removeImage(index) {
+            selectedImages.splice(index, 1);
+            updateImagePreview();
+        }
+
+        // Handle form submission
+        document.getElementById('sellForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!isLoggedIn) {
+                alert('Please login to list an item');
+                window.location.href = '4login.html';
+                return;
+            }
+
+            const category = document.getElementById('category').value;
+            const title = document.getElementById('title').value;
+            const description = document.getElementById('description').value;
+            const price = parseFloat(document.getElementById('price').value);
+            const condition = document.getElementById('condition').value;
+
+            if (selectedImages.length === 0) {
+                alert('Please upload at least one image');
+                return;
+            }
+
+            const item = {
+                id: Date.now().toString(),
+                category,
+                title,
+                description,
+                price,
+                condition,
+                images: selectedImages.map(img => img.data),
+                sellerEmail: localStorage.getItem('userEmail'),
+                datePosted: new Date().toISOString(),
+                status: 'active'
+            };
+
+            try {
+                // Get existing items from localStorage
+                const existingItems = JSON.parse(localStorage.getItem(category) || '[]');
+                console.log('Existing items:', existingItems);
+                
+                // Add new item
+                existingItems.push(item);
+                console.log('Updated items:', existingItems);
+                
+                // Save back to localStorage
+                localStorage.setItem(category, JSON.stringify(existingItems));
+                console.log('Saved to localStorage with key:', category);
+                
+                // Show success message
+                alert('Item listed successfully!');
+                
+                // Redirect to the appropriate category page
+                let redirectUrl;
+                switch(category) {
+                    case 'books':
+                        redirectUrl = 'books.html';
+                        break;
+                    case 'Drawing-Equipments':
+                        redirectUrl = 'Drawing-Equipments.html';
+                        break;
+                    case 'stationary':
+                        redirectUrl = 'stationary.html';
+                        break;
+                    case 'others':
+                        redirectUrl = 'others.html';
+                        break;
+                    default:
+                        redirectUrl = '4.html';
+                }
+                
+                window.location.href = redirectUrl;
+            } catch (error) {
+                console.error('Error saving item:', error);
+                alert('Error saving item. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>

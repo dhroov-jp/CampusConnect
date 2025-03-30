@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="300" height="50" viewBox="0 0 300 50" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background Circle -->
+    <circle cx="25" cy="25" r="20" fill="#4f46e5"/>
+    
+    <!-- Book Icon -->
+    <path d="M15 15h20v30h-20z" fill="white"/>
+    <path d="M15 15h20v5h-20z" fill="#4f46e5"/>
+    <path d="M15 25h20v2h-20z" fill="#4f46e5"/>
+    <path d="M15 30h20v2h-20z" fill="#4f46e5"/>
+    
+    <!-- Text -->
+    <text x="55" y="32" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="white">
+        CampusConnect
+    </text>
+</svg> 
